@@ -63,3 +63,25 @@ Power BI's web has no live MySQL connector, so data moves through CSV exports (v
   placing `{data}` mid-instructions caused the model to occasionally drop earlier formatting rules (fixed by moving all instructions before `{data}`), and a vague "describe unusually large percentages qualitatively" rule caused the model to over-apply it, replaced with an explicit 500% threshold and a worked example.
 
 
+### 5. Tech stack
+
+- Database: MySQL, VS code, DBeaver
+- BI/Dashboard: Power BI Service (web), DAX
+- AI generation: Langflow (local, conda activate langflow → langflow run)
+- LLM: DeepInfra (OpenAI-compatible API)
+- File exchange: CSV via SharePoint (Power BI web has no live MySQL connector)
+
+
+### 6. The repo I put in
+
+- /sql — schema, erp raw data queries, upsert_ai_summary stored procedure
+- /powerbi — DAX measure documentation, semantic model notes, dashboard screenshots
+- /langflow — prompt templates and flow screenshots
+
+
+### 7. Possible future extensions
+•	MOM trend data (the pipeline currently supports one month; the ai_summary table’s month column is already structured to support this)
+•	MOM AI summary comparing performance to the prior period, not just to budget (if have sales details for products)
+•	Automated monthly refresh (currently run manually, department by department)
+
+
