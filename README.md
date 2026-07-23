@@ -1,4 +1,4 @@
-**Actual vs. Budget Variance Analysis with AI-Generated Commentary**
+### Actual vs. Budget Variance Analysis with AI-Generated Commentary
 
 An end-to-end FP&A project that simulates a monthly budget-vs-actual variance analysis for a multi-department retail company, combining a relational database, an interactive BI dashboard, and an AI-powered commentary pipeline. The dataset was self-designed, with AI assistance used to generate realistic sample data.  
 🪴 **Stack:** MySQL → Power BI → Langflow (DeepInfra: DeepSeek-V3)
