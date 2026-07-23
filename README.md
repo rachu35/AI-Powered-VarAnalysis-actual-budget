@@ -80,8 +80,8 @@ Power BI's web has no live MySQL connector, so data moves through CSV exports (v
 
 
 ### 7. Possible future extensions
-•	MOM trend data (the pipeline currently supports one month; the ai_summary table’s month column is already structured to support this)
-•	MOM AI summary comparing performance to the prior period, not just to budget (if have sales details for products)
-•	Automated monthly refresh (currently run manually, department by department)
+- MOM trend data (the pipeline currently supports one month; the ai_summary table’s month column is already structured to support this)
+- MOM AI summary comparing performance to the prior period, not just to budget (if have sales details for products)
+- Automated monthly refresh (currently run manually, department by department)
 
 
