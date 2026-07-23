@@ -39,30 +39,29 @@ An early approach that generated budget figures by adding random noise to actual
 Power BI's web version has no live MySQL connector, so data moves through CSV exports (via SharePoint/OneDrive). The `month` column wasn't included in one export, and in another pass risked being read as text instead of a date, which would have broken date-based filtering in DAX. I confirmed `month` is exported on every pull and verified its type as Date (not text) after import — a text-typed date column would require rewriting DAX filters as string comparisons instead of `DATE()` comparisons.  
 
 🌱 **Power BI (DAX)**  
-- `display_name` vs. `line_item` filter conflict
+- `display_name` vs. `line_item` filter conflict  
   `% of Rev` measures returned blank for some rows. The model uses a disconnected "Income Statement Line Items" table to control row order/labels independently of the data table; some measures read filter context from `display_name`, others from `line_item`, so `SELECTEDVALUE()` came back blank for the mismatched ones. I standardized on one field and used `REMOVEFILTERS` to rebuild context explicitly.  
 
-- GA double-counting on the Overview page
+- GA double-counting on the Overview page  
   Company-wide totals were inflated because GA costs are allocated into each department's "Incl GA" actuals — summing those company-wide counted GA twice. The Overview page now uses non-GA measures only; GA allocation applies at the department-page level (see Section 3).  
 
-- A silent 100x error
+- A silent 100x error  
   One measure multiplied a decimal by 100 for display ("55.17" instead of "0.5517"), but was then reused as a multiplier elsewhere, silently corrupting downstream calculations. I split it into a pure decimal calculation measure and a separate display-only measure — now a standing rule for the model.  
 
-- Blank chart from the wrong filter field
+- Blank chart from the wrong filter field  
   A pie chart built on `sql_var_detail_v1[account_category_sub]` rendered blank because the measure powering it read filter context via `SELECTEDVALUE()` from the disconnected line-items table, which has no relationship to the raw data table. I built a simpler measure using `CALCULATE(SUM(...))` directly on the raw table, so filter context flows naturally.  
 
   
 🌱 **Langflow / LLM**  
-- Correct-looking but fabricated Operating Profit figures, the big bug in the project
+- Correct-looking but fabricated Operating Profit figures, the big bug in the project  
   The AI summary for Beauty stated it "exceeded its operating profit budget by $1,018,000 (135%)" — a number that matched nothing in the data (the real figure was $358,122 / 163.5%).  
 
-- Two causes:
+- Two causes:  
   - The SQL query only passed rows with a non-null `description` to the LLM, silently excluding Revenue/COGS whenever they had no variance note, so the model had no real figure to work from.
   - Even with complete data, Operating Profit (Incl GA) requires a cross-department, gross-profit-weighted GA allocation — multi-step arithmetic LLMs aren't reliable at.  
 
-- Fix: The SQL query was corrected to include all line items regardless of `description`, and — more importantly — the true, DAX-verified Operating Profit (Incl GA) actual/budget figures are now injected directly into the SQL result via `UNION ALL` as a labeled row, with the prompt explicitly instructed to use only that row's numbers, not calculate its own. The LLM's role is scoped to language: turning verified numbers and ERP notes into narrative, never arithmetic. Every figure in the AI summaries traces back to a source-of-truth calculation in SQL or DAX.  
-
-- Prompt formatting consistency: Placing `{data}` mid-instructions caused the model to occasionally drop earlier formatting rules (fixed by moving all instructions before `{data}`), and a vague "describe unusually large percentages qualitatively" rule caused the model to over-apply it — replaced with an explicit 500% threshold and a worked example.
+- Fix: The SQL query was corrected to include all line items regardless of `description`, and — more importantly — the true, DAX-verified Operating Profit (Incl GA) actual/budget figures are now injected directly into the SQL result via `UNION ALL` as a labeled row, with the prompt explicitly instructed to use only that row's numbers, not calculate its own. The LLM's role is scoped to language: turning verified numbers and ERP notes into narrative, never arithmetic. Every figure in the AI summaries traces back to a source-of-truth calculation in SQL or DAX.    
+- Prompt formatting consistency: Placing `{data}` mid-instructions caused the model to occasionally drop earlier formatting rules (fixed by moving all instructions before `{data}`), and a vague "describe unusually large percentages qualitatively" rule caused the model to over-apply it — replaced with an explicit 500% threshold and a worked example.  
 
 
 ### 5. Tech stack
