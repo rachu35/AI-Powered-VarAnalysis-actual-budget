@@ -20,9 +20,6 @@ UNION ALL
 
 SELECT NULL,NULL,NULL,NULL,'Operating Profit',953510,428818
 ```
-- Change monthly parts
-  - WHERE a.month='2025-12-01'
-  - 'Operating Profit',953510,428818
 
 
 ### 🌱 Parser
@@ -68,7 +65,9 @@ Below is the December 2025 financial data for the 	company overall (all departme
 - Database URL: `MySQL connection to [project_var] (local)`
 
 
-
-
+### 💧 Change monthly parts
+- WHERE a.month='2025-12-01'
+- 'Operating Profit',953510,428818
+- Prompt Template text: "December 2025" → update to the new month
 
 
