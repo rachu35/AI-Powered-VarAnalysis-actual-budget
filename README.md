@@ -29,7 +29,8 @@ An end-to-end FP&A project that simulates a monthly budget-vs-actual variance an
 ### 3. The repo I put in  
 - `/sql` — schema, ERP raw data queries, `upsert_ai_summary` stored procedure
 - `/powerbi` — DAX measure documentation, semantic model notes, dashboard screenshots
-- `/langflow` — prompt templates and flow screenshots  
+- `/langflow` — prompt templates and flow screenshots
+- `/dataset` — sample CSV exports of all five tables (self-generated, fictional data)
 <br>
 <br>
 
