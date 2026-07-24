@@ -144,7 +144,8 @@ Below is the December 2025 financial data for the <DEPT_FULL_NAME> department, i
 - financial data for the `Health & Wellness (HW)` department
 
 
-### 💧 Dept_code reference (substitute into `<DEPT_CODE>`, `<DEPT_FULL_NAME>`, `<OP_ACTUAL>`, `<OP_BUDGET>` above)
+### 💧 Dept_code reference
+- substitute into `<DEPT_CODE>`, `<DEPT_FULL_NAME>`, `<OP_ACTUAL>`, `<OP_BUDGET>` above
 | Dept | `<DEPT_CODE>` | `<DEPT_FULL_NAME>` | `<OP_ACTUAL>` | `<OP_BUDGET>` |
 |---|---|---|---|---|
 | Beauty | BT | Beauty (BT) | 577167 | 219045 |
