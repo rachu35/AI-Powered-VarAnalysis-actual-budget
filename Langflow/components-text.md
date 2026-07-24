@@ -141,8 +141,7 @@ Below is the December 2025 financial data for the <DEPT_FULL_NAME> department, i
 - `WHERE a.dept_code='<DEPT_CODE>' AND a.month='2025-12-01'`
 - `'Operating Profit (Incl GA)',<OP_ACTUAL>,<OP_BUDGET>`
 - Prompt Template text: "December 2025" → update to the new month
-- financial data for the `Health & Wellness (HW)` department
-
+- Prompt Template text: "the <DEPT_FULL_NAME> department" → substitute using the table below
 
 ### 💧 Dept_code reference
 | Dept | `<DEPT_CODE>` | `<DEPT_FULL_NAME>` | `<OP_ACTUAL>` | `<OP_BUDGET>` |
