@@ -1,5 +1,5 @@
 ### 🪴 What's in the dashboard?
-The dashboard has 5 pages: a company-wide Overview and 4 department pages (Beauty, Health & Wellness, Household Products, Food & Beverage). All pages share the same layout — a P&L table, variance visuals, and an AI-generated summary card — with department pages including GA-allocated cost figures that the Overview page deliberately excludes (see semantic-model.md).  
+The dashboard has 5 pages: a company-wide Overview and 4 department pages (Beauty, Health & Wellness, Household Products, Food & Beverage). All pages share the same layout, having a P&L table, variance visuals, and an AI-generated summary card, with department pages including GA-allocated cost figures that the Overview page deliberately excludes (see semantic-model.md).  
 
 **🌱 Overview**
 Company-wide P&L (excl. GA allocation), an expense breakdown by category, a variance waterfall, and GA cost allocation by department. The AI summary card on the right pulls from the `ai_summary` table (`dept_code = 'ALL'`).
