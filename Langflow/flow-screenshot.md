@@ -1,6 +1,6 @@
-### What's in the langflow page?
+### 🪴 What's in the langflow page?
 
-**🪴 Langflow's project- 5 Flow for overall and each dept seperately** 
+**🌱 Langflow's project- 5 Flow for overall and each dept seperately** 
 <img width="831" height="470" alt="image" src="https://github.com/user-attachments/assets/1de9b147-87eb-44a0-a1d3-390b24da57c0" />
 <br>
 <br>
