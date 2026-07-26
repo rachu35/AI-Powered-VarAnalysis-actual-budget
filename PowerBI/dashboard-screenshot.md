@@ -25,7 +25,7 @@ Same layout as Beauty, filtered to `Dept_Code = HP`.
 <br>
 <br>
 <br>
-**🌱 Health & Wellness (HW)**
+**🌱 Food & Beverage (FB)**
 Same layout as Beauty, filtered to `Dept_Code = FB`.  
 Note: this department's budget base for Operating Profit is small, so its variance percentage is unusually large — the AI summary describes this qualitatively rather than quoting an exact percentage (see `prompt_templates.md`).
 <img width="1197" height="542" alt="image" src="https://github.com/user-attachments/assets/a852c51e-f47d-4ae1-93fa-a3df68d7abb4" />
