@@ -150,103 +150,142 @@ CALCULATE(
 ```
 <br>
 
-**🌱 GA cost pool**
-
-The GA department's own raw Personnel/Administrative costs, before being
-distributed out to the four operating departments.
+**🌱 GA cost pool**  
+The GA department's own raw Personnel/Administrative costs, before being distributed out to the four operating departments.
 
 ```dax
-GA Personnel Actual = ...
-GA Personnel Budget = ...
-GA Administrative Actual = ...
-GA Administrative Budget = ...
-GA Allocated Actual = ...    -- total GA pool (Personnel + Administrative)
-GA Allocated Budget = ...
+GA Allocated Personnel Actual = [GA Personnel Actual] * [Allocated Rate Actual]
+```
+```dax
+GA Allocated Personnel Budget = [GA Personnel Budget] * [Allocated Rate Budget]
+```
+```dax
+GA Allocated Administrative Actual = [GA Administrative Actual] * [Allocated Rate Actual]
+```
+```dax
+GA Allocated Administrative Budget = [GA Administrative Budget] * [Allocated Rate Budget]
+```
+```dax
+GA Allocated Actual = 
+VAR CurrentLine = SELECTEDVALUE('Income Statement Line Items'[line_item])
+RETURN
+    SWITCH(
+        TRUE(),
+        CurrentLine = "Personnel Expense", [GA Allocated Personnel Actual],
+        CurrentLine = "Administrative expense", [GA Allocated Administrative Actual],
+        CurrentLine = "SG&A Expenses", [GA Allocated Personnel Actual] + [GA Allocated Administrative Actual],
+        CurrentLine = "Operating profit", [GA Allocated Personnel Actual] + [GA Allocated Administrative Actual],
+        BLANK()
+    )
+```
+```dax
+GA Allocated Budget = 
+VAR CurrentLine = SELECTEDVALUE('Income Statement Line Items'[line_item])
+RETURN
+    SWITCH(
+        TRUE(),
+        CurrentLine = "Personnel Expense", [GA Allocated Personnel Budget],
+        CurrentLine = "Administrative expense", [GA Allocated Administrative Budget],
+        CurrentLine = "SG&A Expenses", [GA Allocated Personnel Budget] + [GA Allocated Administrative Budget],
+        CurrentLine = "Operating profit", [GA Allocated Personnel Budget] + [GA Allocated Administrative Budget],
+        BLANK()
+    )
 ```
 <br>
 
-**🌱 GA allocation ratio**
+**🌱 GA allocation ratio**  
+Each department's share of total company gross profit — the basis used to split GA costs. Full reasoning in `semantic-model.md`.
 
-Each department's share of total company gross profit — the basis used to
-split GA costs. Full reasoning in `semantic-model.md`.
-
-```dax
-Allocated % Actual = ...
-Allocated % Budget = ...
-```
-
-**⚠️ A bug this caused:** `Allocated Rate Actual` originally multiplied a
-decimal by 100 for display ("55.17" instead of "0.5517"), but was reused as
-a multiplier elsewhere, silently corrupting downstream calculations. Fixed
-by splitting it into two:
+💧 A small bug this caused: `Allocated Rate Actual` originally multiplied a decimal by 100 for display ("55.17" instead of "0.5517"), but was reused as a multiplier elsewhere, silently corrupting downstream calculations. Fixed by splitting it into two:
 
 ```dax
-Allocated Rate Actual (calc) = ...      -- plain decimal, used inside other measures
-Allocated Rate Actual (display) = ...   -- calc * 100, used only in visuals
-Allocated Rate Budget (calc) = ...
-Allocated Rate Budget (display) = ...
+Allocated Rate Actual = 
+VAR DeptGP = [Gross Profit Actual]
+VAR TotalGP = 
+    CALCULATE(
+        [Gross Profit Actual],
+        ALL(dept_id[Dept_Code]),
+        dept_id[Dept_Code] <> "GA"
+    )
+RETURN
+    DIVIDE(DeptGP, TotalGP)
 ```
+```dax
+Allocated Rate Budget = 
+VAR DeptGP = [Gross Profit Budget]
+VAR TotalGP = 
+    CALCULATE(
+        [Gross Profit Budget],
+        ALL(dept_id[Dept_Code]),
+        dept_id[Dept_Code] <> "GA"
+    )
+RETURN
+    DIVIDE(DeptGP, TotalGP)
+```
+```dax
+Allocated % Actual = [Allocated Rate Actual] * 100
+```
+```dax
+Allocated % Budget = [Allocated Rate Budget] * 100
+```
+<br>
 
 **🌱 GA allocated cost (distributed into each department)**
 
 ```dax
-GA Allocated Personnel Actual = ...
-GA Allocated Personnel Budget = ...
-GA Allocated Administrative Actual = ...
-GA Allocated Administrative Budget = ...
+GA Allocated Personnel Actual = 
+GA Allocated Personnel Budget = 
+GA Allocated Administrative Actual =  
+GA Allocated Administrative Budget =  
 ```
 
-**🌱 Amount rollups: plain vs. "Incl GA"**
-
-Department pages use the "Incl GA" versions. The Overview page uses the
-plain versions — using "Incl GA" there would double-count GA costs.
+**🌱 Amount rollups: plain vs. "Incl GA"**  
+Department pages use the "Incl GA" versions. The Overview page uses the plain versions — using "Incl GA" there would double-count GA costs.
 
 ```dax
-Amount Actual = ...
-Amount Budget = ...
-Amount Actual (incl GA) = ...
-Amount Budget (incl GA) = ...
+Amount Actual =  
+Amount Budget =  
+Amount Actual (incl GA) =  
+Amount Budget (incl GA) =  
 ```
+<br>
 
 **🌱 % of Revenue**
 
 ```dax
-% of Rev Actual = ...
-% of Rev Budget = ...
-% of Rev Actual Incl GA = ...
-% of Rev Budget Incl GA = ...
+% of Rev Actual = 
+% of Rev Budget = 
+% of Rev Actual Incl GA = 
+% of Rev Budget Incl GA =  
 ```
+<br>
 
 **🌱 Variance measures**
 
 ```dax
-Var Amount = ...
-Var Amount (Company) = ...
-Var % = ...
-Var % (Company) = ...
-Waterfall Value = ...
+Var Amount = 
+Var Amount (Company) = 
+Var % = 
+Var % (Company) = 
+Waterfall Value = 
 ```
+<br>
 
-**🌱 Expense breakdown by category**
-
-Powers the Overview page's pie chart and waterfall chart, showing which
-expense category is driving the variance — independent of department.
+**🌱 Expense breakdown by category**  
+Powers the Overview page's pie chart and waterfall chart, showing which expense category is driving the variance — independent of department.
 
 ```dax
-Expense Actual by Category = ...
-Expense Budget by Category = ...
-Expense Var Abs by Category = ...
-Expense Actual by Category (Incl GA) = ...
-Expense Budget by Category (Incl GA) = ...
-Expense Var Abs by Category (Incl GA) = ...
+Expense Actual by Category = 
+Expense Budget by Category = 
+Expense Var Abs by Category = 
+Expense Actual by Category (Incl GA) = 
+Expense Budget by Category (Incl GA) = 
+Expense Var Abs by Category (Incl GA) = 
 ```
+<br>
 
-
-**🌱 AI summary text**
-
-Reads the matching row from the `ai_summary` table, filtered to the current
-page's department. The Overview page has no department filter, so it
-defaults to `"ALL"`.
+**🌱 AI summary text**  
+Reads the matching row from the `ai_summary` table, filtered to the current page's department. The Overview page has no department filter, so it defaults to `"ALL"`.
 
 ```dax
 AI Summary Text =
