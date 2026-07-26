@@ -1,4 +1,4 @@
-### What's in the dashboard?
+### 🪴 What's in the dashboard?
 The dashboard has 5 pages: a company-wide Overview and 4 department pages (Beauty, Health & Wellness, Household Products, Food & Beverage). All pages share the same layout — a P&L table, variance visuals, and an AI-generated summary card — with department pages including GA-allocated cost figures that the Overview page deliberately excludes (see semantic-model.md).  
 
 **🌱 Overview**
