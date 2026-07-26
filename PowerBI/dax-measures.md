@@ -11,30 +11,144 @@ charts and tables), which mixing the two caused a real bug in this project, expl
 **🌱 Core P&L (before GA allocation)**
 
 ```dax
-Revenue Actual = ...
-Revenue Budget = ...
-COGS Actual = ...
-COGS Budget = ...
-Gross Profit Actual = ...
-Gross Profit Budget = ...
-OI Actual = ...      -- Operating Income
-OI Budget = ...
+Revenue Actual = 
+CALCULATE(
+    SUM(sql_var_detail_v1[amount]),
+    sql_var_detail_v1[account_category_sub] = "Revenue",
+    sql_var_detail_v1[amount_type] = "Actual"
+)
 ```
+```dax
+Revenue Budget = 
+CALCULATE(
+    SUM(sql_var_detail_v1[amount]),
+    sql_var_detail_v1[account_category_sub] = "Revenue",
+    sql_var_detail_v1[amount_type] = "Budget"
+)
+```
+```dax
+COGS Actual = 
+CALCULATE(
+    SUM(sql_var_detail_v1[amount]),
+    sql_var_detail_v1[account_category_sub] = "COGS",
+    sql_var_detail_v1[amount_type] = "Actual"
+)
+```
+```dax
+COGS Budget = 
+CALCULATE(
+    SUM(sql_var_detail_v1[amount]),
+    sql_var_detail_v1[account_category_sub] = "COGS",
+    sql_var_detail_v1[amount_type] = "Budget"
+)
+```
+```dax
+Gross Profit Actual = [Revenue Actual] - [COGS Actual]
+```
+```dax
+Gross Profit Budget = [Revenue Budget] - [COGS Budget]
+```
+```dax
+OI Actual = 
+CALCULATE(
+    [Amount Actual],
+    REMOVEFILTERS ( 'Income Statement Line Items' ),
+    'Income Statement Line Items'[line_item] = "Operating profit"
+)
+```
+```dax
+OI Budget = 
+CALCULATE(
+    [Amount Budget],
+    REMOVEFILTERS ( 'Income Statement Line Items' ),
+    'Income Statement Line Items'[line_item] = "Operating profit"
+)
+```
+<br>
 
-**🌱 Operating expenses by category (department's own costs, before GA)**
+**🌱 SG&A expenses by category (department's own costs, before GA)**
 
 ```dax
-Personnel Actual = ...
-Personnel Budget = ...
-Administrative Actual = ...
-Administrative Budget = ...
-Freight Actual = ...
-Freight Budget = ...
-Marketing Actual = ...
-Marketing Budget = ...
-RD Actual = ...
-RD Budget = ...
+Personnel Actual = 
+CALCULATE(
+    SUM(sql_var_detail_v1[amount]),
+    sql_var_detail_v1[account_category_sub] = "Personnel Expense",
+    sql_var_detail_v1[amount_type] = "Actual"
+)
 ```
+```dax
+Personnel Budget = 
+CALCULATE(
+    SUM(sql_var_detail_v1[amount]),
+    sql_var_detail_v1[account_category_sub] = "Personnel Expense",
+    sql_var_detail_v1[amount_type] = "Budget"
+)
+```
+```dax
+Administrative Actual = 
+CALCULATE(
+    SUM(sql_var_detail_v1[amount]),
+    sql_var_detail_v1[account_category_sub] = "Administrative expense",
+    sql_var_detail_v1[amount_type] = "Actual"
+)
+```
+```dax
+Administrative Budget = 
+CALCULATE(
+    SUM(sql_var_detail_v1[amount]),
+    sql_var_detail_v1[account_category_sub] = "Administrative expense",
+    sql_var_detail_v1[amount_type] = "Budget"
+)
+```
+```dax
+Freight Actual = 
+CALCULATE(
+    SUM(sql_var_detail_v1[amount]),
+    sql_var_detail_v1[account_category_sub] = "Freight expense",
+    sql_var_detail_v1[amount_type] = "Actual"
+)
+```
+```dax
+Freight Budget = 
+CALCULATE(
+    SUM(sql_var_detail_v1[amount]),
+    sql_var_detail_v1[account_category_sub] = "Freight expense",
+    sql_var_detail_v1[amount_type] = "Budget"
+)
+```
+```dax
+Marketing Actual = 
+CALCULATE(
+    SUM(sql_var_detail_v1[amount]),
+    sql_var_detail_v1[account_category_sub] = "Marketing expense",
+    sql_var_detail_v1[amount_type] = "Actual"
+)
+```
+```dax
+Marketing Budget = 
+CALCULATE(
+    SUM(sql_var_detail_v1[amount]),
+    sql_var_detail_v1[account_category_sub] = "Marketing expense",
+    sql_var_detail_v1[amount_type] = "Budget"
+)
+```
+```dax
+RD Actual = 
+CALCULATE(
+    SUM(sql_var_detail_v1[amount]),
+    sql_var_detail_v1[account_category_sub] = "R&D",
+    sql_var_detail_v1[amount_type] = "Actual"
+)
+```
+```dax
+RD Budget = 
+CALCULATE(
+    SUM(sql_var_detail_v1[amount]),
+    sql_var_detail_v1[account_category_sub] = "R&D",
+    sql_var_detail_v1[amount_type] = "Budget"
+)
+```
+<br>
 
 **🌱 GA cost pool**
 
@@ -49,6 +163,7 @@ GA Administrative Budget = ...
 GA Allocated Actual = ...    -- total GA pool (Personnel + Administrative)
 GA Allocated Budget = ...
 ```
+<br>
 
 **🌱 GA allocation ratio**
 
