@@ -43,7 +43,7 @@ DATATABLE(
 |---|---|---|
 | `sql_var_detail_v1[dept_code]` | `dept_id[Dept_Code]` | many-to-one |
 | `sql_aitext[dept_code]` | `dept_id[Dept_Code]` | many-to-one |
-| `Income Statement Line Items` | n/a (intentionally not related to anything, didn't create measure) | n/a |
+| `Income Statement Line Items` | n/a (intentionally disconnected — see "Income Statement Line Items" section below) | n/a |
 <img width="841" height="575" alt="image" src="https://github.com/user-attachments/assets/1f3997ae-b617-4f02-a4f4-c9c93c2505ff" />  
 <br>
 <br>
