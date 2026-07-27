@@ -1,4 +1,4 @@
-### 🪴 Why needs DAX(Data Analysis Expressions)
+### 🪴 Why need DAX(Data Analysis Expressions)
 
 - The dashboard needs to answer two different questions with the same data: "how did the whole company do?" and "how did this one department do?", and department numbers include a share of shared G&A costs while the company overall view doesn't (otherwise those costs get counted twice).
 - Most measures come in two versions: a plain version and an "Incl GA" version. There's also a general split between calculation measures (used inside other formulas) and display measures (used only in
