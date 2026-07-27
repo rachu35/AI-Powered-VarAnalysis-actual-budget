@@ -42,7 +42,7 @@ The database (`project_var`) has 4 source tables which were created via DBeaver'
 
 <br>
 
-**🌱 Data cleanup: fixing the `month` column type**
+**🌱 Data cleanup: fixing the `month` column type**  
 When first imported, `month` came in as `VARCHAR` (e.g., `"12/1/25"`) instead of `DATE` — this would have broken date-based filtering in DAX
 downstream (Power BI would need string comparisons instead of proper `DATE()` comparisons). Fixed by adding a new typed column, converting the values, then swapping it in:
 ```sql
