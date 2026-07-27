@@ -154,49 +154,54 @@ CALCULATE(
 The GA department's own raw Personnel/Administrative costs, before being distributed out to the four operating departments.
 
 ```dax
-GA Allocated Personnel Actual = [GA Personnel Actual] * [Allocated Rate Actual]
+GA Personnel Actual = 
+CALCULATE(
+    SUM(sql_var_detail_v1[amount]),
+    sql_var_detail_v1[account_category_sub] = "Personnel Expense",
+    sql_var_detail_v1[amount_type] = "Actual",
+    sql_var_detail_v1[dept_code] = "GA",
+    ALL(dept_id[Dept_Code])
+)
 ```
 ```dax
-GA Allocated Personnel Budget = [GA Personnel Budget] * [Allocated Rate Budget]
+GA Personnel Budget = 
+CALCULATE(
+    SUM(sql_var_detail_v1[amount]),
+    sql_var_detail_v1[account_category_sub] = "Personnel Expense",
+    sql_var_detail_v1[amount_type] = "Budget",
+    sql_var_detail_v1[dept_code] = "GA",
+    ALL(dept_id[Dept_Code])
+)
 ```
 ```dax
-GA Allocated Administrative Actual = [GA Administrative Actual] * [Allocated Rate Actual]
+GA Administrative Actual = 
+CALCULATE(
+    SUM(sql_var_detail_v1[amount]),
+    sql_var_detail_v1[account_category_sub] = "Administrative expense",
+    sql_var_detail_v1[amount_type] = "Actual",
+    sql_var_detail_v1[dept_code] = "GA",
+    ALL(dept_id[Dept_Code])
+)
 ```
 ```dax
-GA Allocated Administrative Budget = [GA Administrative Budget] * [Allocated Rate Budget]
-```
-```dax
-GA Allocated Actual = 
-VAR CurrentLine = SELECTEDVALUE('Income Statement Line Items'[line_item])
-RETURN
-    SWITCH(
-        TRUE(),
-        CurrentLine = "Personnel Expense", [GA Allocated Personnel Actual],
-        CurrentLine = "Administrative expense", [GA Allocated Administrative Actual],
-        CurrentLine = "SG&A Expenses", [GA Allocated Personnel Actual] + [GA Allocated Administrative Actual],
-        CurrentLine = "Operating profit", [GA Allocated Personnel Actual] + [GA Allocated Administrative Actual],
-        BLANK()
-    )
-```
-```dax
-GA Allocated Budget = 
-VAR CurrentLine = SELECTEDVALUE('Income Statement Line Items'[line_item])
-RETURN
-    SWITCH(
-        TRUE(),
-        CurrentLine = "Personnel Expense", [GA Allocated Personnel Budget],
-        CurrentLine = "Administrative expense", [GA Allocated Administrative Budget],
-        CurrentLine = "SG&A Expenses", [GA Allocated Personnel Budget] + [GA Allocated Administrative Budget],
-        CurrentLine = "Operating profit", [GA Allocated Personnel Budget] + [GA Allocated Administrative Budget],
-        BLANK()
-    )
+GA Administrative Budget = 
+CALCULATE(
+    SUM(sql_var_detail_v1[amount]),
+    sql_var_detail_v1[account_category_sub] = "Administrative expense",
+    sql_var_detail_v1[amount_type] = "Budget",
+    sql_var_detail_v1[dept_code] = "GA",
+    ALL(dept_id[Dept_Code])
+)
 ```
 <br>
 
 **🌱 GA allocation ratio**  
 Each department's share of total company gross profit — the basis used to split GA costs. Full reasoning in `semantic-model.md`.
 
-💧 A small bug this caused: `Allocated Rate Actual` originally multiplied a decimal by 100 for display ("55.17" instead of "0.5517"), but was reused as a multiplier elsewhere, silently corrupting downstream calculations. Fixed by splitting it into two:
+💧 A small bug this caused: an early version of this measure multiplied the decimal by 100 inside the same measure for display purposes, then that 
+same measure got reused as a multiplier elsewhere that is silently corrupting downstream calculations. Fixed by keeping them permanently separate: 
+- `Allocated Rate Actual`/`Allocated Rate Budget` return the plain decimal (used inside other measures like GA Allocated Personnel Actual)
+- `Allocated % Actual`/`Allocated % Budget` multiply by 100 purely for display.
 
 ```dax
 Allocated Rate Actual = 
@@ -244,6 +249,32 @@ GA Allocated Administrative Actual = [GA Administrative Actual] * [Allocated Rat
 ```
 ```dax
 GA Allocated Administrative Budget = [GA Administrative Budget] * [Allocated Rate Budget]
+```
+```dax
+GA Allocated Actual = 
+VAR CurrentLine = SELECTEDVALUE('Income Statement Line Items'[line_item])
+RETURN
+    SWITCH(
+        TRUE(),
+        CurrentLine = "Personnel Expense", [GA Allocated Personnel Actual],
+        CurrentLine = "Administrative expense", [GA Allocated Administrative Actual],
+        CurrentLine = "SG&A Expenses", [GA Allocated Personnel Actual] + [GA Allocated Administrative Actual],
+        CurrentLine = "Operating profit", [GA Allocated Personnel Actual] + [GA Allocated Administrative Actual],
+        BLANK()
+    )
+```
+```dax
+GA Allocated Budget = 
+VAR CurrentLine = SELECTEDVALUE('Income Statement Line Items'[line_item])
+RETURN
+    SWITCH(
+        TRUE(),
+        CurrentLine = "Personnel Expense", [GA Allocated Personnel Budget],
+        CurrentLine = "Administrative expense", [GA Allocated Administrative Budget],
+        CurrentLine = "SG&A Expenses", [GA Allocated Personnel Budget] + [GA Allocated Administrative Budget],
+        CurrentLine = "Operating profit", [GA Allocated Personnel Budget] + [GA Allocated Administrative Budget],
+        BLANK()
+    )
 ```
 <br>
 
