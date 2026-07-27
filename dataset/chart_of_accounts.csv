@@ -1,0 +1,26 @@
+﻿account_code,account_name,account_category,account_category_sub
+4000,Sales,Revenue,Revenue
+5000,Cost of Goods Sold,COGS,COGS
+6101,Salary Expense,OpEX,Personnel Expense
+6102,Health Insurance,OpEX,Personnel Expense
+6103,Labor Insurance,OpEX,Personnel Expense
+6104,Pension,OpEX,Personnel Expense
+6105,Bonus and Commission,OpEX,Personnel Expense
+6106,Severance Pay,OpEX,Personnel Expense
+6201,Depreciation,OpEX,Administrative expense
+6202,Amortization,OpEX,Administrative expense
+6203,Office Rent,OpEX,Administrative expense
+6204,Utilities Fees,OpEX,Administrative expense
+6205,Telecom Fees,OpEX,Administrative expense
+6206,IT Software Licenses,OpEX,Administrative expense
+6207,Office Supplies,OpEX,Administrative expense
+6208,Legal & Professional Fees,OpEX,Administrative expense
+6209,Travel & Entertainment,OpEX,Administrative expense
+6210,Employee Training,OpEX,Administrative expense
+6301,Warehouse Costs,OpEX,Freight expense
+6302,Shipping & Logistics - Outbound,OpEX,Freight expense
+6401,Advertising & Promotion,OpEX,Marketing expense
+6402,Trade Shows & Events,OpEX,Marketing expense
+6403,Marketing Platform Subscriptions,OpEX,Marketing expense
+6404,Content & Creative Production,OpEX,Marketing expense
+6501,PB Product Development,OpEX,R&D
