@@ -37,7 +37,7 @@ The database (`project_var`) has 4 source tables which were created via DBeaver'
 | Column | Type | Description |
 |---|---|---|
 | Department | VARCHAR | Full department name |
-| Dept_Code | VARCHAR | Links to dept_id |
+| Dept_Code | VARCHAR | |
 | Description | TEXT | |
 
 <br>
