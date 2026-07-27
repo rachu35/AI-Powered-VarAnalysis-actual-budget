@@ -233,20 +233,82 @@ Allocated % Budget = [Allocated Rate Budget] * 100
 **🌱 GA allocated cost (distributed into each department)**
 
 ```dax
-GA Allocated Personnel Actual = 
-GA Allocated Personnel Budget = 
-GA Allocated Administrative Actual =  
-GA Allocated Administrative Budget =  
+GA Allocated Personnel Actual = [GA Personnel Actual] * [Allocated Rate Actual]
+
 ```
+```dax
+GA Allocated Personnel Budget = [GA Personnel Budget] * [Allocated Rate Budget]
+```
+```dax
+GA Allocated Administrative Actual = [GA Administrative Actual] * [Allocated Rate Actual]
+```
+```dax
+GA Allocated Administrative Budget = [GA Administrative Budget] * [Allocated Rate Budget]
+```
+<br>
 
 **🌱 Amount rollups: plain vs. "Incl GA"**  
 Department pages use the "Incl GA" versions. The Overview page uses the plain versions — using "Incl GA" there would double-count GA costs.
 
 ```dax
-Amount Actual =  
-Amount Budget =  
-Amount Actual (incl GA) =  
-Amount Budget (incl GA) =  
+Amount Actual = 
+VAR CurrentLine = SELECTEDVALUE('Income Statement Line Items'[line_item])
+VAR CurrentSub = SELECTEDVALUE('Income Statement Line Items'[account_category_sub])
+RETURN
+    SWITCH(
+        TRUE(),
+        CurrentSub = "Revenue", [Revenue Actual],
+        CurrentSub = "COGS", [COGS Actual],
+        CurrentSub = "Personnel Expense", [Personnel Actual],
+        CurrentSub = "Administrative expense", [Administrative Actual],
+        CurrentSub = "Freight expense", [Freight Actual],
+        CurrentSub = "Marketing expense", [Marketing Actual],
+        CurrentSub = "R&D", [RD Actual],
+        CurrentLine = "Gross Profit", [Gross Profit Actual],
+        CurrentLine = "SG&A Expenses", [Personnel Actual] + [Administrative Actual] + [Freight Actual] + [Marketing Actual] + [RD Actual],
+        CurrentLine = "Operating profit", [Gross Profit Actual] - ([Personnel Actual] + [Administrative Actual] + [Freight Actual] + [Marketing Actual] + [RD Actual]),
+        BLANK()
+    )
+```
+```dax
+Amount Budget = 
+VAR CurrentLine = SELECTEDVALUE('Income Statement Line Items'[line_item])
+VAR CurrentSub = SELECTEDVALUE('Income Statement Line Items'[account_category_sub])
+RETURN
+    SWITCH(
+        TRUE(),
+        CurrentSub = "Revenue", [Revenue Budget],
+        CurrentSub = "COGS", [COGS Budget],
+        CurrentSub = "Personnel Expense", [Personnel Budget],
+        CurrentSub = "Administrative expense", [Administrative Budget],
+        CurrentSub = "Freight expense", [Freight Budget],
+        CurrentSub = "Marketing expense", [Marketing Budget],
+        CurrentSub = "R&D", [RD Budget],
+        CurrentLine = "Gross Profit", [Gross Profit Budget],
+        CurrentLine = "SG&A Expenses", [Personnel Budget] + [Administrative Budget] + [Freight Budget] + [Marketing Budget] + [RD Budget],
+        CurrentLine = "Operating profit", [Gross Profit Budget] - ([Personnel Budget] + [Administrative Budget] + [Freight Budget] + [Marketing Budget] + [RD Budget]),
+        BLANK()
+    )
+```
+```dax
+Amount Actual (incl GA) = 
+VAR CurrentLine = SELECTEDVALUE('Income Statement Line Items'[line_item])
+RETURN
+    IF(
+        CurrentLine = "Operating profit",
+        [Amount Actual] - [GA Allocated Actual],
+        [Amount Actual] + [GA Allocated Actual]
+    )
+```
+```dax
+Amount Budget (incl GA) = 
+VAR CurrentLine = SELECTEDVALUE('Income Statement Line Items'[line_item])
+RETURN
+    IF(
+        CurrentLine = "Operating profit",
+        [Amount Budget] - [GA Allocated Budget],
+        [Amount Budget] + [GA Allocated Budget]
+    )
 ```
 <br>
 
