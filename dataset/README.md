@@ -13,4 +13,3 @@
 | `budget.csv` | Budgeted amounts, by account, department, and month |
 | `chart_of_accounts.csv` | Account code → category mapping |
 | `dept_id.csv` | Department code → name lookup |
-| `ai_summary.csv` | AI-generated variance narratives, one per department plus company-wide |
