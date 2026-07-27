@@ -316,9 +316,47 @@ RETURN
 
 ```dax
 % of Rev Actual = 
+VAR RevenueAmt = 
+    CALCULATE(
+        [Amount Actual],
+        REMOVEFILTERS ( 'Income Statement Line Items' ),
+        'Income Statement Line Items'[line_item] = "Revenue"
+    )
+RETURN
+    DIVIDE ( [Amount Actual], RevenueAmt )*100
+```
+```dax
 % of Rev Budget = 
+VAR RevenueAmt = 
+    CALCULATE(
+        [Amount Budget],
+        REMOVEFILTERS ( 'Income Statement Line Items' ),
+        'Income Statement Line Items'[line_item] = "Revenue"
+    )
+RETURN
+    DIVIDE ( [Amount Budget], RevenueAmt )*100
+```
+```dax
 % of Rev Actual Incl GA = 
-% of Rev Budget Incl GA =  
+VAR RevenueAmt = 
+    CALCULATE(
+        [Amount Actual (Incl GA)],
+        REMOVEFILTERS ( 'Income Statement Line Items' ),
+        'Income Statement Line Items'[line_item] = "Revenue"
+    )
+RETURN
+    DIVIDE ( [Amount Actual (Incl GA)], RevenueAmt )*100
+```
+```dax
+% of Rev Budget Incl GA = 
+VAR RevenueAmt = 
+    CALCULATE(
+        [Amount Budget (Incl GA)],
+        REMOVEFILTERS ( 'Income Statement Line Items' ),
+        'Income Statement Line Items'[line_item] = "Revenue"
+    )
+RETURN
+    DIVIDE ( [Amount Budget (Incl GA)], RevenueAmt )*100
 ```
 <br>
 
