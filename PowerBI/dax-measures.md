@@ -363,11 +363,25 @@ RETURN
 **🌱 Variance measures**
 
 ```dax
-Var Amount = 
-Var Amount (Company) = 
-Var % = 
-Var % (Company) = 
+Var Amount = [Amount Actual (incl GA)] - [Amount Budget (incl GA)]
+```
+```dax
+Var Amount (Company) = [Amount Actual] - [Amount Budget]
+```
+```dax
+Var % = DIVIDE([Var Amount], [Amount Budget (incl GA)])*100
+```
+```dax
+Var % (Company) = DIVIDE([Var Amount (Company)], [Amount Budget])*100
+```
+```dax
 Waterfall Value = 
+VAR CurrentSign = SELECTEDVALUE('Income Statement Line Items'[waterfall_sign])
+RETURN
+    IF(
+        NOT ISBLANK(CurrentSign),
+        [Var Amount] * CurrentSign
+    )
 ```
 <br>
 
@@ -376,11 +390,53 @@ Powers the Overview page's pie chart and waterfall chart, showing which expense 
 
 ```dax
 Expense Actual by Category = 
+CALCULATE(
+    SUM(sql_var_detail_v1[amount]),
+    sql_var_detail_v1[amount_type] = "Actual"
+)
+```
+```dax
 Expense Budget by Category = 
+CALCULATE(
+    SUM(sql_var_detail_v1[amount]),
+    sql_var_detail_v1[amount_type] = "Budget"
+)
+```
+```dax
 Expense Var Abs by Category = 
+ABS([Expense Actual by Category] - [Expense Budget by Category])
+```
+```dax
 Expense Actual by Category (Incl GA) = 
+VAR CurrentCat = SELECTEDVALUE(sql_var_detail_v1[account_category_sub])
+RETURN
+SWITCH(
+    TRUE(),
+    CurrentCat = "Personnel Expense", [Personnel Actual] + [GA Allocated Personnel Actual],
+    CurrentCat = "Administrative expense", [Administrative Actual] + [GA Allocated Administrative Actual],
+    CurrentCat = "Freight expense", [Freight Actual],
+    CurrentCat = "Marketing expense", [Marketing Actual],
+    CurrentCat = "R&D", [RD Actual],
+    BLANK()
+)
+```
+```dax
 Expense Budget by Category (Incl GA) = 
+VAR CurrentCat = SELECTEDVALUE(sql_var_detail_v1[account_category_sub])
+RETURN
+SWITCH(
+    TRUE(),
+    CurrentCat = "Personnel Expense", [Personnel Budget] + [GA Allocated Personnel Budget],
+    CurrentCat = "Administrative expense", [Administrative Budget] + [GA Allocated Administrative Budget],
+    CurrentCat = "Freight expense", [Freight Budget],
+    CurrentCat = "Marketing expense", [Marketing Budget],
+    CurrentCat = "R&D", [RD Budget],
+    BLANK()
+)
+```
+```dax
 Expense Var Abs by Category (Incl GA) = 
+ABS([Expense Actual by Category (Incl GA)] - [Expense Budget by Category (Incl GA)])
 ```
 <br>
 
