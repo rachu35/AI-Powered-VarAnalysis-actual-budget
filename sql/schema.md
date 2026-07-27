@@ -9,7 +9,7 @@ The database (`project_var`) has 4 source tables which were created via DBeaver'
 | transaction_id | VARCHAR | |
 | account_code | VARCHAR | Links to chart_of_accounts |
 | dept_code | VARCHAR | Links to dept_id |
-| month | VARCHAR | |
+| month | VARCHAR | As originally imported (e.g. "12/1/25") converted to DATE, see "Data cleanup" below |
 | actual_amount | DECIMAL | |
 | description | TEXT | Variance explanation (nullable) |
 <br>
@@ -20,7 +20,7 @@ The database (`project_var`) has 4 source tables which were created via DBeaver'
 | transaction_id | VARCHAR | |
 | account_code | VARCHAR | Links to chart_of_accounts |
 | dept_code | VARCHAR | Links to dept_id |
-| month | VARCHAR | |
+| month | VARCHAR | As originally imported (e.g. "12/1/25") converted to DATE, see "Data cleanup" below |
 | budget_amount | DECIMAL | |
 <br>
 
@@ -64,5 +64,5 @@ ALTER TABLE project_var.actuals CHANGE month_date month DATE;
 DESCRIBE project_var.actuals;
 ```
 
-Also, Same fix applied to `budget.month`.
+The Same fix applied to `budget.month`.
 
